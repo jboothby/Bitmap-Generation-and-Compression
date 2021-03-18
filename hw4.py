@@ -25,7 +25,6 @@ def create_index(input_file, output_path, sorted):
 
     # create filename for output
     filename = input_file
-    filename += "_bitmap"
 
     out = []
     # get file data and sort if necessary
@@ -146,14 +145,20 @@ def compress_index(bitmap_index, output_path, compression_method, word_size):
     print(f"File: {output_path}   \t\tRuns: {total_runs} \t\tLiterals: {total_literals}")
 
 
+""" Create index over unsorted animals.txt, store bitmap and compressions in a folder called "example"""
+"""
 create_index("animals.txt", "example", False)
 compress_index("example/animals.txt_bitmap", None, "WAH", 8)
 compress_index("example/animals.txt_bitmap", None, "WAH", 16)
-compress_index("animals.txt_bitmap", None, "WAH", 32)
-compress_index("animals.txt_bitmap", None, "WAH", 64)
+compress_index("example/animals.txt_bitmap", None, "WAH", 32)
+compress_index("example/animals.txt_bitmap", None, "WAH", 64)
+"""
 
+""" Create index over sorted animals.txt, store bitmap and compressions in cwd"""
+"""
 create_index("animals.txt", None, True)
-compress_index("animals.txt_bitmap_sorted", None, "WAH", 8)
-compress_index("animals.txt_bitmap_sorted", None, "WAH", 16)
-compress_index("animals.txt_bitmap_sorted", None, "WAH", 32)
-compress_index("animals.txt_bitmap_sorted", None, "WAH", 64)
+compress_index("animals.txt_sorted", None, "WAH", 8)
+compress_index("animals.txt_sorted", None, "WAH", 16)
+compress_index("animals.txt_sorted", None, "WAH", 32)
+compress_index("animals.txt_sorted", None, "WAH", 64)
+"""

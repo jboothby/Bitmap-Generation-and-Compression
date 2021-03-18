@@ -29,6 +29,11 @@ pad_literal(chunk, size)
 
 Usage:
 
-	1. This program should be imported as a module, and then interfaced with using only create_index and compress_index. For example
+	1. This program should be imported as a module, and then interfaced with using only create_index and compress_index. For example:
+        import hw4
+        hw4.create_index("animals_small.txt", None, True)
+        hw4.compress_index("animals_small.txt_sorted", None, "WAH", 8)
+
+        This script will import the program create the index over a sorted version of animals_small.txt, and compress it using word size 8.
 	
 	2. Alternatively, the program can be run directly with individual function calls added to the bottom of the script. There are some commented out examples at the bottom of the code.

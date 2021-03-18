@@ -1,6 +1,8 @@
 import math
+import os
 
-
+"""This method takes an input file and creates a bitmap index over it, then writes the output to the"""
+"""The supplied output_path. It assumes current working directory if no output_path is supplied"""
 def create_index(input_file, output_path, sorted):
     # turn the animal cell into the correct string of bits
     animal = {
@@ -17,6 +19,14 @@ def create_index(input_file, output_path, sorted):
 
     adopted = {'True': '10', 'False': '01'}
 
+    # if not output path supplied, assume current
+    if output_path is None:
+        output_path = os.getcwd()
+
+    # create filename for output
+    filename = input_file
+    filename += "_bitmap"
+
     out = []
     # get file data and sort if necessary
     with open(input_file, 'r') as file:
@@ -24,9 +34,10 @@ def create_index(input_file, output_path, sorted):
             out.append(line[:-1])  # strip trailing newline
     if sorted:
         out.sort()
+        filename += "_sorted"
 
     # create output file
-    output = open(output_path, 'wb')
+    output = open(os.path.join(output_path, filename),  'wb')
 
     # iterate through input file and create index for each line
     for line in out:
@@ -100,8 +111,7 @@ def compress_index(bitmap_index, output_path, compression_method, word_size):
                 # have at least 1 run
                 # loop until end of rows, too many runs for a single byte, or run ends
                 # word_size - 2 is the number of available bits for counting runs, so we have **2 countable per byte
-                while i < total_rows and (count / chunk_size) <= 2 ** (word_size - 2) - 1 and data[column][
-                    i] == bit_type:
+                while i < total_rows and (count / chunk_size) <= 2 ** (word_size - 2) - 1 and data[column][i] == bit_type:
                     count += 1
                     i += 1
 
@@ -122,30 +132,27 @@ def compress_index(bitmap_index, output_path, compression_method, word_size):
                 # add the run encoding to the output for the column
                 output[column] += run_encoding
 
+    # assume cwd if no path supplied
     if output_path is None:
-        output_path = "" + bitmap_index + "_" + compression_method + "_" + str(word_size)
+        output_path = os.getcwd()
 
-    with open(output_path, 'wb') as file_out:
+    # make filename based on parameters
+    filename = "" + bitmap_index + "_" + compression_method + "_" + str(word_size)
+
+    with open(os.path.join(output_path, filename), 'wb') as file_out:
         for row in output:
             row += '\n'
             file_out.write(row.encode())
     print(f"File: {output_path}   \t\tRuns: {total_runs} \t\tLiterals: {total_literals}")
 
 
-# create_index("animals_small.txt", "animal_small.txt_bitmap", False)
-# create_index("animals_small.txt", "animal_small.txt_bitmap_sorted", True)
-# compress_index("animal_small.txt_bitmap_sorted", None, "WAH", 8)
-# compress_index("animal_small.txt_bitmap_sorted", None, "WAH", 16)
-# compress_index("animal_small.txt_bitmap_sorted", None, "WAH", 32)
-# compress_index("animal_small.txt_bitmap_sorted", None, "WAH", 64)
-
-create_index("animals.txt", "animals.txt_bitmap", False)
-compress_index("animals.txt_bitmap", None, "WAH", 8)
-compress_index("animals.txt_bitmap", None, "WAH", 16)
+create_index("animals.txt", "example", False)
+compress_index("example/animals.txt_bitmap", None, "WAH", 8)
+compress_index("example/animals.txt_bitmap", None, "WAH", 16)
 compress_index("animals.txt_bitmap", None, "WAH", 32)
 compress_index("animals.txt_bitmap", None, "WAH", 64)
 
-create_index("animals.txt", "animals.txt_bitmap_sorted", True)
+create_index("animals.txt", None, True)
 compress_index("animals.txt_bitmap_sorted", None, "WAH", 8)
 compress_index("animals.txt_bitmap_sorted", None, "WAH", 16)
 compress_index("animals.txt_bitmap_sorted", None, "WAH", 32)

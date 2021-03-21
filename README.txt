@@ -1,6 +1,4 @@
-How to use hw4.py
-
-This program creates a bitmap index over the supplied data files and performs WAH compression on that index.
+How to use hw4.py This program creates a bitmap index over the supplied data files and performs WAH compression on that index.
 
 Functions:
 

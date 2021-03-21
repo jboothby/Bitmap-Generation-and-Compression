@@ -24,7 +24,7 @@ def create_index(input_file, output_path, sorted):
         output_path = os.getcwd()
 
     # create filename for output
-    filename = input_file
+    filename = os.path.basename(input_file)
 
     out = []
     # get file data and sort if necessary
@@ -136,29 +136,29 @@ def compress_index(bitmap_index, output_path, compression_method, word_size):
         output_path = os.getcwd()
 
     # make filename based on parameters
-    filename = "" + bitmap_index + "_" + compression_method + "_" + str(word_size)
+    filename = "" + os.path.basename(bitmap_index) + "_" + compression_method + "_" + str(word_size)
 
     with open(os.path.join(output_path, filename), 'wb') as file_out:
         for row in output:
             row += '\n'
             file_out.write(row.encode())
-    print(f"File: {output_path}   \t\tRuns: {total_runs} \t\tLiterals: {total_literals}")
+    print(f"File: {filename}   \t\tRuns: {total_runs} \t\tLiterals: {total_literals}")
 
 
 """ Create index over unsorted animals.txt, store bitmap and compressions in a folder called "example"""
 """
-create_index("animals.txt", "example", False)
-compress_index("example/animals.txt_bitmap", None, "WAH", 8)
-compress_index("example/animals.txt_bitmap", None, "WAH", 16)
-compress_index("example/animals.txt_bitmap", None, "WAH", 32)
-compress_index("example/animals.txt_bitmap", None, "WAH", 64)
+create_index("animals.txt", "./Bitmaps", False)
+compress_index("./Bitmaps/animals.txt", "./Compressed", "WAH", 8)
+compress_index("./Bitmaps/animals.txt", "./Compressed", "WAH", 16)
+compress_index("./Bitmaps/animals.txt", "./Compressed", "WAH", 32)
+compress_index("./Bitmaps/animals.txt", "./Compressed", "WAH", 64)
 """
 
 """ Create index over sorted animals.txt, store bitmap and compressions in cwd"""
 """
-create_index("animals.txt", None, True)
-compress_index("animals.txt_sorted", None, "WAH", 8)
-compress_index("animals.txt_sorted", None, "WAH", 16)
-compress_index("animals.txt_sorted", None, "WAH", 32)
-compress_index("animals.txt_sorted", None, "WAH", 64)
+create_index("animals.txt", "./Bitmaps", True)
+compress_index("./Bitmaps/animals.txt_sorted", "./Compressed", "WAH", 8)
+compress_index("./Bitmaps/animals.txt_sorted", "./Compressed", "WAH", 16)
+compress_index("./Bitmaps/animals.txt_sorted", "./Compressed", "WAH", 32)
+compress_index("./Bitmaps/animals.txt_sorted", "./Compressed", "WAH", 64)
 """
